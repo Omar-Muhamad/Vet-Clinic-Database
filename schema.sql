@@ -1,5 +1,6 @@
 /* Database schema to keep the structure of entire database. */
 
+DROP TABLE IF EXISTS animals;
 CREATE TABLE animals (
   id INT GENERATED ALWAYS AS IDENTITY,
   name VARCHAR(100),
@@ -66,11 +67,13 @@ CREATE TABLE specializations (
 
 DROP TABLE IF EXISTS visits;
 CREATE TABLE visits (
+  id INT GENERATED ALWAYS AS IDENTITY,
 	animal_id INT,
 	vet_id INT,
-  PRIMARY KEY (animal_id, vet_id),
+  visit_date DATE,
+  PRIMARY KEY (id),
 	CONSTRAINT fk_animals 
-    FOREIGN KEY (animal_id) REFERENCES animals (id) ON DELETE CASCADE,
+    FOREIGN KEY (animal_id) REFERENCES animals (id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_vets_visits
-	  FOREIGN KEY (vet_id) REFERENCES vets (id) ON DELETE CASCADE
+	  FOREIGN KEY (vet_id) REFERENCES vets (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
