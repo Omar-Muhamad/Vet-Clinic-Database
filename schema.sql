@@ -1,13 +1,13 @@
 /* Database schema to keep the structure of entire database. */
 
 CREATE TABLE animals (
-    id INT GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(100),
-    date_of_birth DATE,
-    escape_attempts INT,
-    neutered BOOLEAN,
-    weight_kg DECIMAL,
-    PRIMARY KEY(id)
+  id INT GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(100),
+  date_of_birth DATE,
+  escape_attempts INT,
+  neutered BOOLEAN,
+  weight_kg DECIMAL,
+  PRIMARY KEY(id)
 );
 
 ALTER TABLE animals
@@ -43,3 +43,34 @@ ALTER TABLE animals
     FOREIGN KEY (owner_id)
     REFERENCES owners(id)
     ON DELETE CASCADE;
+
+DROP TABLE IF EXISTS vets;
+CREATE TABLE vets (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(100),
+  age INT,
+  date_of_graduation DATE,
+  PRIMARY KEY(id)
+);
+
+DROP TABLE IF EXISTS specializations;
+CREATE TABLE specializations (
+	species_id INT,
+	vet_id INT,
+  PRIMARY KEY (species_id, vet_id),
+  CONSTRAINT fk_species 
+    FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE CASCADE,
+  CONSTRAINT fk_vets
+	  FOREIGN KEY (vet_id) REFERENCES vets (id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS visits;
+CREATE TABLE visits (
+	animal_id INT,
+	vet_id INT,
+  PRIMARY KEY (animal_id, vet_id),
+	CONSTRAINT fk_animals 
+    FOREIGN KEY (animal_id) REFERENCES animals (id) ON DELETE CASCADE,
+  CONSTRAINT fk_vets_visits
+	  FOREIGN KEY (vet_id) REFERENCES vets (id) ON DELETE CASCADE
+);
